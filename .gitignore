@@ -1,0 +1,22 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# Logs / temp
+*.log
+*.tmp
+
+# Python (local upload helper)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Server-only deploy artifact (systemd unit) — not part of the website
+portfolio-upload.service

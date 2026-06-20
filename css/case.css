@@ -1,0 +1,291 @@
+/* ===========================================
+   CASE STUDY PAGES
+   =========================================== */
+
+.case-hero {
+    min-height: 60vh;
+    display: flex;
+    align-items: flex-end;
+    padding: 6rem 2rem 4rem;
+}
+
+.case-hero-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.case-back {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    transition: color 0.3s;
+    display: inline-block;
+    margin-bottom: 2rem;
+    cursor: none;
+}
+.case-back:hover { color: var(--text); }
+
+.case-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+}
+
+.case-subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-top: 1.5rem;
+    max-width: 500px;
+    line-height: 1.6;
+}
+
+/* Meta Grid */
+.case-meta {
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.case-meta-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+}
+
+.meta-label {
+    display: block;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.meta-value {
+    font-size: 0.9rem;
+    color: var(--text);
+}
+
+/* Sections */
+.case-section {
+    padding: 4rem 2rem;
+}
+
+.case-content {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.case-heading {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+}
+
+.case-text {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    font-weight: 300;
+}
+
+/* Image Layouts */
+.case-img-full {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.case-img-duo {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.case-img-trio {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.case-img-full img,
+.case-img-duo img,
+.case-img-trio img {
+    width: 100%;
+    display: block;
+}
+
+/* Placeholder for missing images */
+.img-placeholder {
+    aspect-ratio: 16 / 10;
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+    background: var(--surface);
+    transition: border-color 0.3s, background 0.3s;
+}
+
+.img-placeholder span {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.img-placeholder small {
+    font-size: 0.7rem;
+    opacity: 0.5;
+}
+
+/* Process Steps */
+.case-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    margin-top: 2rem;
+}
+
+.case-step {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.case-step:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.step-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    min-width: 3rem;
+    line-height: 1;
+}
+
+.step-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+/* Next Case */
+.case-next {
+    padding: 6rem 2rem;
+    text-align: center;
+    border-top: 1px solid var(--border);
+}
+
+.case-next-label {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.case-next-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: none;
+    transition: gap 0.3s;
+}
+
+.case-next-link:hover { gap: 2rem; }
+
+.case-next-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.case-next-arrow {
+    font-size: 2rem;
+    color: var(--text-secondary);
+    transition: transform 0.3s;
+}
+
+.case-next-link:hover .case-next-arrow {
+    transform: translateX(8px);
+}
+
+/* Back to top */
+.back-to-top {
+    position: fixed;
+    top: 5rem;
+    right: 2rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--bg) 70%, transparent);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: none;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-6px);
+    transition: opacity 0.35s ease, transform 0.35s ease, background 0.3s, border-color 0.3s;
+    z-index: 99;
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    background: color-mix(in srgb, var(--bg) 90%, transparent);
+    border-color: var(--text);
+    transform: translateY(-2px);
+}
+
+.back-to-top svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .case-hero { min-height: 50vh; padding: 6rem 1.5rem 3rem; }
+    .case-meta-grid { grid-template-columns: repeat(2, 1fr); }
+    .case-section { padding: 3rem 1.5rem; }
+    .case-img-duo { grid-template-columns: 1fr; }
+    .case-img-trio { grid-template-columns: 1fr; }
+    .case-step { flex-direction: column; gap: 1rem; }
+    .step-num { font-size: 1.5rem; }
+    .back-to-top { top: 4.5rem; right: 1rem; width: 40px; height: 40px; }
+}
+
+/* Card surface — neutral dark grey in dark mode (overrides per-case translucent surface) */
+[data-theme="dark"] .case-grid > .case-section {
+    background: #181818;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}

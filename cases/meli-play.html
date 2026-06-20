@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meli Play — Case Study · Jem Teraoka</title>
+    <meta name="description" content="UX/UI Case Study for Meli Play — a social recommendations feature redesigned to reverse a 4% drop in platform usage.">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=20260423a">
+    <link rel="stylesheet" href="../css/case.css?v=20260423a">
+    <style>
+    /* =========================================
+       MELI PLAY — editorial case study
+       ========================================= */
+    :root {
+        --meli: #E6B800;
+        --meli-soft: rgba(230, 184, 0, 0.12);
+        --meli-border: rgba(230, 184, 0, 0.35);
+    }
+    [data-theme="light"] {
+        --meli: #FFD84D;
+        --meli-soft: rgba(255, 216, 77, 0.1);
+        --meli-border: rgba(255, 216, 77, 0.3);
+    }
+
+    /* ===== HERO ===== */
+    .case-hero {
+        min-height: 92vh;
+        padding: 8rem 18vw 5rem;
+        position: relative;
+        display: flex; align-items: flex-end;
+        overflow: hidden;
+        background:
+            radial-gradient(ellipse at 20% 10%, rgba(255, 216, 77, 0.18) 0%, transparent 55%),
+            radial-gradient(ellipse at 85% 85%, rgba(255, 216, 77, 0.10) 0%, transparent 60%),
+            linear-gradient(180deg, rgba(10,10,10,0.0) 0%, rgba(10,10,10,0.15) 70%, var(--bg) 100%);
+    }
+    [data-theme="light"] .case-hero {
+        background:
+            radial-gradient(ellipse at 20% 10%, rgba(230, 184, 0, 0.18) 0%, transparent 55%),
+            radial-gradient(ellipse at 85% 85%, rgba(230, 184, 0, 0.10) 0%, transparent 60%),
+            linear-gradient(180deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.3) 70%, var(--bg) 100%);
+    }
+    .case-hero-inner {
+        max-width: 100%; margin: 0;
+        width: 62%;
+        position: relative; z-index: 2;
+    }
+    .case-hero-media {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        object-fit: cover;
+        object-position: center center;
+        z-index: 0;
+        pointer-events: none;
+        opacity: 0.5;
+    }
+    .case-hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(8,8,8,0.7) 0%, rgba(8,8,8,0.35) 32%, rgba(8,8,8,0.05) 58%, rgba(8,8,8,0) 100%);
+        z-index: 1;
+        pointer-events: none;
+    }
+    [data-theme="light"] .case-hero::after {
+        background: linear-gradient(90deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.32) 32%, rgba(255,255,255,0.05) 58%, rgba(255,255,255,0) 100%);
+    }
+
+    /* Nav legibility over hero image (dark theme) */
+    .nav:not(.scrolled) .nav-logo,
+    .nav:not(.scrolled) .nav-link,
+    .nav:not(.scrolled) .lang-toggle,
+    .nav:not(.scrolled) .theme-toggle {
+        color: rgba(255, 255, 255, 0.95);
+    }
+    .nav:not(.scrolled) .lang-toggle {
+        border-color: rgba(255, 255, 255, 0.55);
+    }
+    [data-theme="light"] .nav:not(.scrolled) .nav-logo,
+    [data-theme="light"] .nav:not(.scrolled) .nav-link,
+    [data-theme="light"] .nav:not(.scrolled) .lang-toggle,
+    [data-theme="light"] .nav:not(.scrolled) .theme-toggle {
+        color: rgba(10, 10, 10, 0.9);
+    }
+    [data-theme="light"] .nav:not(.scrolled) .lang-toggle {
+        border-color: rgba(10, 10, 10, 0.45);
+    }
+    .case-back {
+        font-size: 0.72rem;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 3rem;
+        display: inline-block;
+        padding: 0.65rem 1.2rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 100px;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(10px) saturate(140%);
+        -webkit-backdrop-filter: blur(10px) saturate(140%);
+        transition: color 0.3s, border-color 0.3s, background 0.3s;
+    }
+    .case-back:hover {
+        color: var(--meli);
+        border-color: rgba(255, 255, 255, 0.18);
+        background: rgba(0, 0, 0, 0.9);
+    }
+    .case-hero .case-title {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: clamp(3rem, 8.5vw, 6.5rem);
+        font-weight: 700;
+        line-height: 0.92;
+        letter-spacing: -0.04em;
+    }
+    .case-title .dot { color: var(--meli); }
+    .case-hero .case-subtitle {
+        font-size: clamp(1.05rem, 1.4vw, 1.3rem);
+        color: rgba(255, 255, 255, 0.95);
+        margin-top: 2rem;
+        max-width: 720px;
+        line-height: 1.55;
+        font-weight: 400;
+    }
+    [data-theme="light"] .case-hero .case-subtitle {
+        color: rgba(10, 10, 10, 0.88);
+    }
+
+    /* ===== META STRIP ===== */
+    .case-meta { padding: 3rem 18vw; }
+    .case-meta-grid {
+        max-width: 100%;
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    /* ===== SECTIONS ===== */
+    .case-section { padding: 7rem 18vw; }
+    .case-content { max-width: 100%; margin: 0; }
+
+    .case-section:has(> .case-img-duo),
+    .case-section:has(> .case-img-trio),
+    .case-section:has(> .case-img-full),
+    .case-section:has(> .mockup-grid) {
+        padding: 5rem 18vw;
+    }
+
+    /* ===== KICKER ===== */
+    .case-kicker {
+        display: block;
+        margin-bottom: 2.4rem;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 0.72rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        font-weight: 500;
+    }
+    .case-kicker .num {
+        display: block;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: clamp(2.8rem, 6vw, 4.8rem);
+        font-weight: 700;
+        color: var(--meli);
+        line-height: 0.85;
+        letter-spacing: -0.045em;
+        text-transform: none;
+        margin-bottom: 0.8rem;
+        padding-bottom: 0.9rem;
+        position: relative;
+    }
+    .case-kicker .num::after {
+        content: "";
+        position: absolute;
+        left: 0; bottom: 0;
+        width: 42px; height: 2px;
+        background: var(--meli);
+    }
+
+    /* ===== HEADING ===== */
+    .case-content .case-heading {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: clamp(1.6rem, 3vw, 2.6rem);
+        font-weight: 700;
+        letter-spacing: -0.022em;
+        line-height: 1.1;
+        margin-bottom: 1.8rem;
+        max-width: none;
+    }
+
+    /* ===== BODY TEXT ===== */
+    .case-content .case-text {
+        font-size: clamp(1.08rem, 1.18vw, 1.22rem);
+        line-height: 1.75;
+        color: var(--text-secondary);
+        font-weight: 300;
+        max-width: none;
+        margin-bottom: 1.3rem;
+    }
+    .case-content .case-text em { font-style: italic; }
+    .case-content .case-text strong { color: var(--text); font-weight: 500; }
+
+    /* ===== PULL QUOTE ===== */
+    .case-pull {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: clamp(1.3rem, 2.2vw, 1.9rem);
+        font-weight: 400;
+        line-height: 1.3;
+        letter-spacing: -0.02em;
+        color: var(--text);
+        max-width: none;
+        margin: 2.5rem 0;
+        padding: 0;
+        border-left: none;
+    }
+    .case-pull::before {
+        content: "— ";
+        color: var(--meli);
+        font-weight: 600;
+    }
+
+    /* ===== BULLETS ===== */
+    .case-bullets {
+        list-style: none; padding: 0;
+        margin: 2rem 0 2.5rem;
+        display: flex; flex-direction: column;
+        gap: 1.4rem;
+        max-width: none;
+    }
+    .case-bullets li {
+        position: relative;
+        padding-left: 1.9rem;
+        font-size: clamp(1.05rem, 1.15vw, 1.18rem);
+        line-height: 1.75;
+        color: var(--text-secondary);
+        font-weight: 300;
+        max-width: none;
+    }
+    .case-bullets li::before {
+        content: "";
+        position: absolute; left: 0; top: 0.65em;
+        width: 10px; height: 10px; border-radius: 50%;
+        border: 1.5px solid var(--meli);
+        background: transparent;
+    }
+    .case-bullets li strong { color: var(--text); font-weight: 500; }
+    .case-bullets li em { font-style: italic; }
+
+    /* ===== QUOTE CARDS (research testimonials) ===== */
+    .quote-list {
+        list-style: none; padding: 0;
+        margin: 1.6rem 0 0;
+        display: flex; flex-direction: column;
+        gap: 1.4rem;
+    }
+    .quote-list li {
+        padding: 1.4rem 1.5rem;
+        border-left: 2px solid var(--meli);
+        background: color-mix(in srgb, var(--surface) 45%, transparent);
+        border-radius: 0 10px 10px 0;
+    }
+    [data-theme="light"] .quote-list li {
+        background: #1f1f1f;
+    }
+    .quote-list blockquote {
+        font-size: clamp(0.98rem, 1.05vw, 1.08rem);
+        line-height: 1.6;
+        color: var(--text);
+        font-weight: 400;
+        font-style: italic;
+        margin: 0 0 0.6rem;
+    }
+    .quote-list cite {
+        display: block;
+        font-style: normal;
+        font-size: 0.72rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--meli);
+        font-weight: 600;
+    }
+
+    /* ===== SUB-HEADING ===== */
+    .sub-heading {
+        display: block;
+        margin: 3rem 0 1.2rem;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+    }
+
+    /* ===== BENCHMARK GRID ===== */
+    .bench-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.2rem;
+        margin-top: 2.2rem;
+    }
+    .bench-cell {
+        padding: 1.6rem 1.4rem 1.8rem;
+        border-top: 1px solid var(--border);
+        display: flex; flex-direction: column;
+        gap: 1rem;
+    }
+    .bench-logo {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: clamp(1.05rem, 1.3vw, 1.25rem);
+        font-weight: 700;
+        color: var(--text);
+        letter-spacing: -0.02em;
+    }
+    .bench-cell ul {
+        list-style: none; padding: 0; margin: 0;
+        display: flex; flex-direction: column;
+        gap: 0.6rem;
+    }
+    .bench-cell li {
+        font-size: 0.86rem;
+        line-height: 1.55;
+        color: var(--text-secondary);
+        font-weight: 300;
+        padding-left: 0.9rem;
+        position: relative;
+    }
+    .bench-cell li::before {
+        content: "·";
+        color: var(--meli);
+        font-weight: 700;
+        position: absolute; left: 0;
+    }
+    @media (max-width: 980px) { .bench-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .bench-grid { grid-template-columns: 1fr; } }
+
+    /* ===== STAT GRID ===== */
+    .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4rem;
+        margin-top: 2.5rem;
+        border: none;
+        border-radius: 0;
+        overflow: visible;
+        background: transparent;
+        max-width: 100%;
+    }
+    .stat-cell {
+        padding: 0;
+        border: none;
+        display: flex;
+        flex-direction: column;
+    }
+    .stat-cat {
+        display: block;
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.22em;
+        color: var(--meli);
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+    .stat-num {
+        display: block;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: clamp(2rem, 4vw, 3.4rem);
+        font-weight: 700;
+        color: var(--meli);
+        line-height: 0.95;
+        letter-spacing: -0.035em;
+        margin-bottom: 0.9rem;
+    }
+    .stat-label {
+        font-size: clamp(0.95rem, 1vw, 1.05rem);
+        line-height: 1.55;
+        color: var(--text-secondary);
+        font-weight: 300;
+        max-width: 38ch;
+    }
+    @media (max-width: 820px) {
+        .stat-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
+    /* ===== INSIGHT LIST ===== */
+    .insight-list {
+        margin-top: 2rem;
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        max-width: none;
+    }
+    .insight-list ul {
+        list-style: none; padding: 0; margin: 0;
+        display: flex; flex-direction: column;
+        gap: 0;
+    }
+    .insight-list li {
+        position: relative;
+        padding: 1.5rem 0 1.5rem 2rem;
+        font-size: clamp(1rem, 1.1vw, 1.12rem);
+        line-height: 1.65;
+        color: var(--text-secondary);
+        font-weight: 300;
+        border-top: 1px solid var(--border);
+    }
+    .insight-list li::before {
+        content: "+";
+        position: absolute; left: 0; top: 1.35rem;
+        color: var(--meli);
+        font-weight: 700;
+        font-size: 1.3rem; line-height: 1;
+    }
+    .insight-list li strong { color: var(--text); font-weight: 500; }
+    .insight-list li em { font-style: italic; }
+
+    /* ===== SCREENS ===== */
+    .screen-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.4rem;
+    }
+    .screen-cell {
+        border: none;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #f2f2f2;
+        transition: transform 0.5s ease;
+    }
+    .screen-cell:hover { transform: translateY(-2px); }
+    .screen-cell img {
+        width: 100%;
+        display: block;
+        aspect-ratio: 1687 / 1061;
+        object-fit: contain;
+    }
+    @media (max-width: 720px) { .screen-grid { grid-template-columns: 1fr; } }
+
+    .case-grid > .case-section.screens-only {
+        padding: 0;
+        border: none;
+        background: transparent;
+    }
+    .case-grid > .case-section.screens-only:hover { border-color: transparent; }
+
+    /* ===== NEXT CASE ===== */
+    .case-next { padding: 8rem 18vw; }
+
+    /* ===== GRID / CARDS ===== */
+    .case-grid {
+        padding: 3rem 18vw 2rem;
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 1.4rem;
+    }
+    .case-grid > .case-section {
+        padding: 2.6rem 2.4rem;
+        grid-column: span 12;
+        border: none;
+        border-radius: 14px;
+        background: color-mix(in srgb, var(--surface) 72%, transparent);
+        backdrop-filter: blur(14px) saturate(140%);
+        -webkit-backdrop-filter: blur(14px) saturate(140%);
+    }
+    .case-grid > .case-section.span-6 { grid-column: span 6; }
+    .case-grid > .case-section.span-12 { grid-column: span 12; }
+    .case-grid > .case-section:has(> .mockup-grid),
+    .case-grid > .case-section:has(> .case-img-duo),
+    .case-grid > .case-section:has(> .case-img-trio),
+    .case-grid > .case-section:has(> .case-img-full) {
+        padding: 2.6rem 2.4rem;
+    }
+    .case-grid .case-kicker { margin-bottom: 1.4rem; }
+    .case-grid .case-kicker .num {
+        font-size: clamp(1.8rem, 3vw, 2.6rem);
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.55rem;
+    }
+    .case-grid .case-kicker .num::after { width: 32px; height: 2px; }
+    .case-grid .case-content .case-heading {
+        font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+        margin-bottom: 1rem;
+        line-height: 1.2;
+    }
+    .case-grid .case-content .case-text {
+        font-size: clamp(0.95rem, 1vw, 1.02rem);
+        line-height: 1.65;
+        margin-bottom: 0.8rem;
+    }
+    .case-grid .case-pull {
+        font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+        margin: 1.2rem 0;
+        line-height: 1.32;
+    }
+    .case-grid .case-bullets {
+        gap: 0.9rem;
+        margin: 0.9rem 0 1rem;
+    }
+    .case-grid .case-bullets li {
+        font-size: clamp(0.92rem, 1vw, 1rem);
+        line-height: 1.6;
+        padding-left: 1.5rem;
+    }
+    .case-grid .case-bullets li::before { width: 8px; height: 8px; }
+    .case-grid .sub-heading { margin: 1.6rem 0 0.7rem; font-size: 0.68rem; }
+    .case-grid .stat-grid { gap: 1.8rem; margin-top: 1.4rem; }
+    .case-grid .stat-num { font-size: clamp(1.6rem, 3vw, 2.4rem); margin-bottom: 0.5rem; }
+    .case-grid .stat-label { font-size: 0.88rem; }
+    .case-grid .insight-list li {
+        font-size: 0.92rem;
+        padding: 0.95rem 0 0.95rem 1.6rem;
+        line-height: 1.55;
+    }
+    .case-grid .insight-list li::before { top: 0.85rem; font-size: 1.1rem; }
+    .case-grid > .case-section.span-6 .bench-grid { grid-template-columns: repeat(2, 1fr); }
+    .case-grid > .case-section.span-6 .stat-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .case-grid > .case-section.span-6 .stat-grid .stat-label { max-width: 52ch; }
+
+    @media (max-width: 900px) {
+        .case-grid { padding: 2rem 1.5rem; grid-template-columns: 1fr; }
+        .case-grid > .case-section.span-6 { grid-column: span 1; }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1100px) {
+        .case-hero-inner { width: 100%; }
+    }
+    @media (max-width: 768px) {
+        .case-hero { padding: 7rem 1.5rem 3.5rem; min-height: 78vh; }
+        .case-hero-media { opacity: 0.3; height: 100%; }
+        .case-meta { padding: 2rem 1.5rem; }
+        .case-section { padding: 4.5rem 1.5rem; }
+        .case-section:has(> .case-img-duo),
+        .case-section:has(> .case-img-trio),
+        .case-section:has(> .case-img-full),
+        .case-section:has(> .mockup-grid) { padding: 3rem 1.5rem; }
+        .case-meta-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem 2rem; }
+        .case-kicker .num { font-size: clamp(3.5rem, 14vw, 5rem); }
+        .case-next { padding: 5rem 1.5rem; }
+    }
+    </style>
+</head>
+<body data-theme="light">
+    <canvas class="glyph-canvas" id="glyphCanvas"></canvas>
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-ring" id="cursorRing"><span class="cursor-text">view</span></div>
+
+    <nav class="nav" id="nav">
+        <a href="../" class="nav-logo magnetic flip-text">jem</a>
+        <div class="nav-links">
+            <a href="../#cases" class="nav-link magnetic flip-text" data-i18n="nav.work">work</a>
+            <a href="../#about" class="nav-link magnetic flip-text" data-i18n="nav.about">about</a>
+            <a href="../#contact" class="nav-link magnetic flip-text" data-i18n="nav.contact">contact</a>
+        </div>
+        <div class="nav-actions">
+            <button class="lang-toggle magnetic" id="langToggle" aria-label="Toggle language">EN</button>
+            <button class="theme-toggle magnetic" id="themeToggle" aria-label="Toggle theme">
+                <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="case-hero">
+        <img class="case-hero-media" src="../assets/capa-meli.png" alt="Meli Play on iPhone — social recommendations view" loading="eager">
+        <div class="case-hero-inner">
+            <a href="../#work" class="case-back magnetic">back</a>
+            <h1 class="case-title">Meli Play<span class="dot">.</span></h1>
+            <p class="case-subtitle">A feature redesign to reverse a measured 4% drop in platform usage — by making social recommendations native to the product.</p>
+        </div>
+    </section>
+
+    <!-- Meta -->
+    <section class="case-meta">
+        <div class="case-meta-grid">
+            <div class="meta-item"><span class="meta-label">Type</span><span class="meta-value">UX/UI · Feature Redesign</span></div>
+            <div class="meta-item"><span class="meta-label">Process</span><span class="meta-value">Double Diamond · CSD Matrix</span></div>
+            <div class="meta-item"><span class="meta-label">Year</span><span class="meta-value">2025</span></div>
+            <div class="meta-item"><span class="meta-label">Tools</span><span class="meta-value">Figma, FigJam</span></div>
+        </div>
+    </section>
+
+    <div class="case-grid">
+    <!-- 01 Signal -->
+    <section class="case-section">
+        <div class="case-content">
+            <span class="case-kicker"><span class="num">01</span> Signal</span>
+            <h2 class="case-heading">Usage dropped 4% in 30 days</h2>
+            <p class="case-text">Analytics showed a measurable decline against the previous quarter — and pointed to <em>where</em> the leak was, never <em>why</em>. On a content platform, recurrence compounds. We opened research before opening Figma.</p>
+        </div>
+    </section>
+
+    <!-- 02 Insight -->
+    <section class="case-section span-6">
+        <div class="case-content">
+            <span class="case-kicker"><span class="num">02</span> Insight</span>
+            <h2 class="case-heading">People kept WhatsApp chats with themselves</h2>
+            <p class="case-text">Four interviews, ages 21–60, converged on the same workaround: users were leaving Meli Play to ask friends what to watch, and saving titles in side conversations to remember later.</p>
+            <ul class="quote-list">
+                <li>
+                    <blockquote>"Tenho uma conversa de WhatsApp comigo mesma pra anotar todos os filmes que o pessoal do trabalho me recomenda."</blockquote>
+                    <cite>Carla · 21</cite>
+                </li>
+                <li>
+                    <blockquote>"A tecnologia não é minha praia. Gostaria de ter um lugar com os conteúdos destacados pela minha família."</blockquote>
+                    <cite>Roberto · 60</cite>
+                </li>
+            </ul>
+            <p class="case-pull">The catalog wasn't the problem. The social layer around it was missing.</p>
+        </div>
+    </section>
+
+    <!-- 03 Gap -->
+    <section class="case-section span-6">
+        <div class="case-content">
+            <span class="case-kicker"><span class="num">03</span> Gap</span>
+            <h2 class="case-heading">Every player recommends <em>to</em> the user. None lets the user's people recommend.</h2>
+            <p class="case-text">A sweep of the four incumbents — each owns a distinct wedge, all miss the same layer.</p>
+            <div class="bench-grid">
+                <div class="bench-cell">
+                    <span class="bench-logo">NETFLIX</span>
+                    <ul><li>Algorithmic recs based on viewing history.</li></ul>
+                </div>
+                <div class="bench-cell">
+                    <span class="bench-logo">Disney+</span>
+                    <ul><li>IP-led, tight integration with Disney's ecosystem.</li></ul>
+                </div>
+                <div class="bench-cell">
+                    <span class="bench-logo">Prime Video</span>
+                    <ul><li>"Watch Party" for synchronous remote viewing.</li></ul>
+                </div>
+                <div class="bench-cell">
+                    <span class="bench-logo">Max</span>
+                    <ul><li>Same-day theatrical releases on select titles.</li></ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04 Solution -->
+    <section class="case-section">
+        <div class="case-content">
+            <span class="case-kicker"><span class="num">04</span> Solution</span>
+            <h2 class="case-heading">Build what the catalog was missing</h2>
+            <p class="case-text">Five features around a single idea: the user's people become the strongest recommendation engine the app has. Every feature anchors to a direct quote from research.</p>
+            <div class="insight-list">
+                <ul>
+                    <li><strong>Favoritos tab.</strong> Minha Lista + titles you liked — reachable in 2 taps from anywhere.</li>
+                    <li><strong>Assistir Novamente.</strong> A rail inside Para Você that surfaces finished content automatically.</li>
+                    <li><strong>Recomendados pelos Amigos.</strong> A feed populated by what friends share inside the app — kills the WhatsApp workaround.</li>
+                    <li><strong>Native sharing.</strong> Primary action on every title screen, so the social flywheel actually starts.</li>
+                    <li><strong>Reactions (Gostei / Amei / Não é pra mim).</strong> Explicit feedback that corrects the recommender over time.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 05 Impact -->
+    <section class="case-section span-6">
+        <div class="case-content">
+            <span class="case-kicker"><span class="num">05</span> Impact</span>
+            <h2 class="case-heading">What we projected</h2>
+            <div class="stat-grid">
+                <div class="stat-cell">
+                    <span class="stat-cat">Reversal</span>
+                    <span class="stat-num">+4%</span>
+                    <span class="stat-label">Recovers the measured monthly drop that kicked off the project.</span>
+                </div>
+                <div class="stat-cell">
+                    <span class="stat-cat">Engagement</span>
+                    <span class="stat-num">+22%</span>
+                    <span class="stat-label">Weekly active sessions driven by the social feed loop.</span>
+                </div>
+                <div class="stat-cell">
+                    <span class="stat-cat">Retention</span>
+                    <span class="stat-num">+15%</span>
+                    <span class="stat-label">30-day retention among users interacting with friend recs.</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 06 Takeaways -->
+    <section class="case-section span-6">
+        <div class="case-content">
+            <span class="case-kicker"><span class="num">06</span> Takeaways</span>
+            <h2 class="case-heading">What I carry forward</h2>
+            <div class="insight-list">
+                <ul>
+                    <li><strong>A 4% drop is a research prompt, not a UI brief.</strong> Starting with data kept the team honest.</li>
+                    <li><strong>The social layer is cheap to build, expensive to fake.</strong> People notice when a rec comes from a friend vs. an algorithm.</li>
+                    <li><strong>When every incumbent misses the same thing, it's not a gap — it's a product.</strong></li>
+                </ul>
+            </div>
+            <span class="sub-heading">Process</span>
+            <p class="case-text">4 interviews (21–60) · CSD matrix · benchmark · hi-fi in Figma · usability testing.</p>
+        </div>
+    </section>
+
+    <!-- Screens -->
+    <section class="case-section screens-only">
+        <div class="screen-grid">
+            <div class="screen-cell"><img src="../assets/meli.png" alt="Meli Play — Home with personalized rails" loading="lazy"></div>
+            <div class="screen-cell"><img src="../assets/meli.png" alt="Meli Play — Favoritos tab" loading="lazy"></div>
+            <div class="screen-cell"><img src="../assets/meli.png" alt="Meli Play — Recomendados pelos Amigos" loading="lazy"></div>
+            <div class="screen-cell"><img src="../assets/meli.png" alt="Meli Play — Title detail with reactions" loading="lazy"></div>
+        </div>
+    </section>
+    </div>
+
+    <!-- Next -->
+    <section class="case-next">
+        <span class="case-next-label">Next project</span>
+        <a href="music-app.html" class="case-next-link magnetic">
+            <span class="case-next-name">Music App</span>
+            <span class="case-next-arrow">&rarr;</span>
+        </a>
+    </section>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <span class="footer-copy">&copy; 2026 Jem Teraoka</span>
+            <a href="../" class="footer-top magnetic">voltar ao inicio</a>
+        </div>
+    </footer>
+
+    <button class="back-to-top magnetic" id="backToTop" aria-label="Back to top">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+    </button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="../js/case.js?v=20260423a"></script>
+</body>
+</html>
