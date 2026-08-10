@@ -146,7 +146,12 @@
         // Smooth follow (lerp, no overshoot)
         const dotState  = { x: -200, y: -200 };
         const ringState = { x: -200, y: -200 };
-        const DOT_LERP = 0.35;
+        // The dot tracks the pointer exactly. The site hides the real cursor
+        // (cursor: none), so anything less than 1 here means the only pointer
+        // the user can see permanently trails their hand — at 0.35 it needed
+        // ~6 frames to catch up, which reads as the whole site lagging even
+        // when it renders at full frame rate. The ring keeps its spring.
+        const DOT_LERP = 1;
         const RING_LERP = 0.18;
 
         function lerpStep(state, targetX, targetY, factor) {
@@ -222,8 +227,10 @@
             const glyphs = ['+', '×', '○', '◇', '□', '·', '◦', '⊕', '⊗', '△', '▽', '⬡'];
             const CELL = 22, RADIUS = 120, FADE = 0.94;
             let cols, rows, grid;
+            const active = new Set();   // indices of cells currently lit
 
             function initGrid() {
+                active.clear();   // indices are invalidated when the grid is rebuilt
                 const dpr = Math.min(window.devicePixelRatio, 2);
                 glyphCanvas.width = window.innerWidth * dpr;
                 glyphCanvas.height = window.innerHeight * dpr;
@@ -257,21 +264,38 @@
 
                 const cx = ringState.x, cy = ringState.y;
 
-                for (let i = 0; i < grid.length; i++) {
+                // Light up only the cells inside the cursor's radius, found by
+                // index arithmetic instead of scanning the whole grid. At 1080p
+                // the grid holds ~4000 cells; the radius covers ~120 of them.
+                const c0 = Math.max(0, Math.floor((cx - RADIUS) / CELL));
+                const c1 = Math.min(cols - 1, Math.ceil((cx + RADIUS) / CELL));
+                const r0 = Math.max(0, Math.floor((cy - RADIUS) / CELL));
+                const r1 = Math.min(rows - 1, Math.ceil((cy + RADIUS) / CELL));
+                const RADIUS2 = RADIUS * RADIUS;
+
+                for (let r = r0; r <= r1; r++) {
+                    for (let col = c0; col <= c1; col++) {
+                        const c = grid[r * cols + col];
+                        if (!c) continue;
+                        const dx = c.x - cx, dy = c.y - cy;
+                        const d2 = dx * dx + dy * dy;   // compare squares, skip sqrt
+                        if (d2 < RADIUS2) {
+                            const t = 1 - Math.sqrt(d2) / RADIUS;
+                            c.o = Math.max(c.o, t * t * 0.65);
+                            if (c.o > 0.005) active.add(r * cols + col);
+                        }
+                    }
+                }
+
+                // Fade and draw only the cells still carrying opacity.
+                for (const i of active) {
                     const c = grid[i];
-                    const dx = c.x - cx, dy = c.y - cy;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < RADIUS) {
-                        const t = 1 - dist / RADIUS;
-                        c.o = Math.max(c.o, t * t * 0.65);
-                    }
                     c.o *= FADE;
-                    if (c.o > 0.005) {
-                        ctx.fillStyle = dark
-                            ? `rgba(180,160,255,${c.o})`
-                            : `rgba(80,60,180,${c.o * 0.5})`;
-                        ctx.fillText(c.g, c.x, c.y);
-                    }
+                    if (c.o <= 0.005) { c.o = 0; active.delete(i); continue; }
+                    ctx.fillStyle = dark
+                        ? `rgba(180,160,255,${c.o})`
+                        : `rgba(80,60,180,${c.o * 0.5})`;
+                    ctx.fillText(c.g, c.x, c.y);
                 }
             }
             animateGlyphs();
@@ -293,13 +317,19 @@
     // ═══════════ MAGNETIC HOVER ═══════════
     if (!isTouchDevice) {
         document.querySelectorAll('.magnetic:not(.flip-text):not(.contact-link)').forEach(el => {
+            // Measure once on enter. Reading getBoundingClientRect() inside
+            // mousemove and writing a transform straight after forced a
+            // synchronous reflow on every single pointer event.
+            let rect = null;
+            el.addEventListener('mouseenter', () => { rect = el.getBoundingClientRect(); });
             el.addEventListener('mousemove', (e) => {
-                const rect = el.getBoundingClientRect();
+                if (!rect) rect = el.getBoundingClientRect();
                 const x = e.clientX - rect.left - rect.width / 2;
                 const y = e.clientY - rect.top - rect.height / 2;
                 el.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
             });
             el.addEventListener('mouseleave', () => {
+                rect = null;
                 el.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
                 el.style.transform = '';
                 setTimeout(() => { el.style.transition = ''; }, 500);

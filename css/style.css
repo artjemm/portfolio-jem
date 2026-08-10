@@ -464,12 +464,15 @@ body {
 
 .about-card.mac-window {
     background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    /* No backdrop-filter: #about sits above the glyph canvas (z-index 2 vs 1)
+       and paints a 96%-opaque background, so what is behind this card is a
+       flat colour. Blurring a flat colour returns the same flat colour — the
+       effect was invisible, but it re-blurred a 1200px-wide, full-height card
+       on every scroll frame. Same for will-change, which pinned a GPU layer
+       for a transform that only runs once on entrance. */
     border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 16px;
     padding: 0;
-    will-change: transform;
     transition: background 0.5s, border-color 0.4s;
     overflow: hidden;
 }
