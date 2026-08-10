@@ -146,12 +146,7 @@
         // Smooth follow (lerp, no overshoot)
         const dotState  = { x: -200, y: -200 };
         const ringState = { x: -200, y: -200 };
-        // The dot tracks the pointer exactly. The site hides the real cursor
-        // (cursor: none), so anything less than 1 here means the only pointer
-        // the user can see permanently trails their hand — at 0.35 it needed
-        // ~6 frames to catch up, which reads as the whole site lagging even
-        // when it renders at full frame rate. The ring keeps its spring.
-        const DOT_LERP = 1;
+        const DOT_LERP = 0.35;
         const RING_LERP = 0.18;
 
         function lerpStep(state, targetX, targetY, factor) {
