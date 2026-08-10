@@ -451,9 +451,10 @@ body {
 #about {
     position: relative;
     z-index: 2;
+    /* No backdrop-filter here: the background is 96% opaque, so a blur behind
+       it is all but invisible — but it forces the compositor to re-blur
+       everything under a full-height section on every scroll frame. */
     background: color-mix(in srgb, var(--bg) 96%, transparent);
-    backdrop-filter: blur(60px);
-    -webkit-backdrop-filter: blur(60px);
 }
 
 .about-wrapper {
@@ -847,11 +848,13 @@ body {
     display: block;
     transform: scale(1.02);
     transition: transform 1s var(--ease-out-expo);
-    will-change: transform;
 }
 
+/* will-change only while hovering: leaving it on permanently keeps a GPU
+   layer alive for every card, for an animation that is rarely running. */
 .bento-card:hover .bento-media img {
     transform: scale(1.08) translateX(-10px);
+    will-change: transform;
 }
 
 .bento-meta {

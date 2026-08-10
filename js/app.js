@@ -244,6 +244,8 @@
 
             function animateGlyphs() {
                 requestAnimationFrame(animateGlyphs);
+                // Nothing to draw with the tab in the background.
+                if (document.hidden) return;
                 const dpr = Math.min(window.devicePixelRatio, 2);
                 ctx.clearRect(0, 0, glyphCanvas.width / dpr, glyphCanvas.height / dpr);
                 if (!mouseEntered) return;
@@ -396,16 +398,27 @@
     const backToTop = document.querySelector('.back-to-top');
     const footerEl = document.querySelector('.footer');
     const baseBottom = 28; // px — matches CSS 1.75rem
+    // Coalesced into one rAF per frame: scroll fires far more often than the
+    // screen refreshes, and reading getBoundingClientRect() right before
+    // writing style.bottom forced a synchronous reflow on every event.
+    let scrollTicking = false;
+    const onScrollFrame = () => {
+        scrollTicking = false;
+        const y = window.scrollY;
+        nav.classList.toggle('scrolled', y > 100);
+        if (!backToTop) return;
+        backToTop.classList.toggle('is-visible', y > 400);
+        if (!footerEl) return;
+        // Only measure the footer once the button is actually on screen.
+        if (y <= 400) return;
+        const rect = footerEl.getBoundingClientRect();
+        const overlap = window.innerHeight - rect.top;
+        backToTop.style.bottom = overlap > 0 ? (baseBottom + overlap) + 'px' : '';
+    };
     window.addEventListener('scroll', () => {
-        nav.classList.toggle('scrolled', window.scrollY > 100);
-        if (backToTop) {
-            backToTop.classList.toggle('is-visible', window.scrollY > 400);
-            if (footerEl) {
-                const rect = footerEl.getBoundingClientRect();
-                const overlap = window.innerHeight - rect.top;
-                backToTop.style.bottom = overlap > 0 ? (baseBottom + overlap) + 'px' : '';
-            }
-        }
+        if (scrollTicking) return;
+        scrollTicking = true;
+        requestAnimationFrame(onScrollFrame);
     }, { passive: true });
     backToTop?.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -614,8 +627,17 @@
             const startTime = performance.now() / 1000;
             let creationComplete = false;
 
+            // The hero scrolls away, but WebGL kept rendering it the whole way
+            // down the page. Stop drawing once it leaves the viewport.
+            let heroVisible = true;
+            new IntersectionObserver(
+                ([entry]) => { heroVisible = entry.isIntersecting; },
+                { threshold: 0 }
+            ).observe(container);
+
             function animate3D() {
                 requestAnimationFrame(animate3D);
+                if (document.hidden || !heroVisible) return;
 
                 // Creation: progressively reveal the geometry
                 if (!creationComplete) {
