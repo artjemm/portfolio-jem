@@ -222,10 +222,8 @@
             const glyphs = ['+', '×', '○', '◇', '□', '·', '◦', '⊕', '⊗', '△', '▽', '⬡'];
             const CELL = 22, RADIUS = 120, FADE = 0.94;
             let cols, rows, grid;
-            const active = new Set();   // indices of cells currently lit
 
             function initGrid() {
-                active.clear();   // indices are invalidated when the grid is rebuilt
                 const dpr = Math.min(window.devicePixelRatio, 2);
                 glyphCanvas.width = window.innerWidth * dpr;
                 glyphCanvas.height = window.innerHeight * dpr;
@@ -246,8 +244,6 @@
 
             function animateGlyphs() {
                 requestAnimationFrame(animateGlyphs);
-                // Nothing to draw with the tab in the background.
-                if (document.hidden) return;
                 const dpr = Math.min(window.devicePixelRatio, 2);
                 ctx.clearRect(0, 0, glyphCanvas.width / dpr, glyphCanvas.height / dpr);
                 if (!mouseEntered) return;
@@ -259,38 +255,21 @@
 
                 const cx = ringState.x, cy = ringState.y;
 
-                // Light up only the cells inside the cursor's radius, found by
-                // index arithmetic instead of scanning the whole grid. At 1080p
-                // the grid holds ~4000 cells; the radius covers ~120 of them.
-                const c0 = Math.max(0, Math.floor((cx - RADIUS) / CELL));
-                const c1 = Math.min(cols - 1, Math.ceil((cx + RADIUS) / CELL));
-                const r0 = Math.max(0, Math.floor((cy - RADIUS) / CELL));
-                const r1 = Math.min(rows - 1, Math.ceil((cy + RADIUS) / CELL));
-                const RADIUS2 = RADIUS * RADIUS;
-
-                for (let r = r0; r <= r1; r++) {
-                    for (let col = c0; col <= c1; col++) {
-                        const c = grid[r * cols + col];
-                        if (!c) continue;
-                        const dx = c.x - cx, dy = c.y - cy;
-                        const d2 = dx * dx + dy * dy;   // compare squares, skip sqrt
-                        if (d2 < RADIUS2) {
-                            const t = 1 - Math.sqrt(d2) / RADIUS;
-                            c.o = Math.max(c.o, t * t * 0.65);
-                            if (c.o > 0.005) active.add(r * cols + col);
-                        }
-                    }
-                }
-
-                // Fade and draw only the cells still carrying opacity.
-                for (const i of active) {
+                for (let i = 0; i < grid.length; i++) {
                     const c = grid[i];
+                    const dx = c.x - cx, dy = c.y - cy;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < RADIUS) {
+                        const t = 1 - dist / RADIUS;
+                        c.o = Math.max(c.o, t * t * 0.65);
+                    }
                     c.o *= FADE;
-                    if (c.o <= 0.005) { c.o = 0; active.delete(i); continue; }
-                    ctx.fillStyle = dark
-                        ? `rgba(180,160,255,${c.o})`
-                        : `rgba(80,60,180,${c.o * 0.5})`;
-                    ctx.fillText(c.g, c.x, c.y);
+                    if (c.o > 0.005) {
+                        ctx.fillStyle = dark
+                            ? `rgba(180,160,255,${c.o})`
+                            : `rgba(80,60,180,${c.o * 0.5})`;
+                        ctx.fillText(c.g, c.x, c.y);
+                    }
                 }
             }
             animateGlyphs();
@@ -312,19 +291,13 @@
     // ═══════════ MAGNETIC HOVER ═══════════
     if (!isTouchDevice) {
         document.querySelectorAll('.magnetic:not(.flip-text):not(.contact-link)').forEach(el => {
-            // Measure once on enter. Reading getBoundingClientRect() inside
-            // mousemove and writing a transform straight after forced a
-            // synchronous reflow on every single pointer event.
-            let rect = null;
-            el.addEventListener('mouseenter', () => { rect = el.getBoundingClientRect(); });
             el.addEventListener('mousemove', (e) => {
-                if (!rect) rect = el.getBoundingClientRect();
+                const rect = el.getBoundingClientRect();
                 const x = e.clientX - rect.left - rect.width / 2;
                 const y = e.clientY - rect.top - rect.height / 2;
                 el.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
             });
             el.addEventListener('mouseleave', () => {
-                rect = null;
                 el.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
                 el.style.transform = '';
                 setTimeout(() => { el.style.transition = ''; }, 500);
@@ -423,27 +396,16 @@
     const backToTop = document.querySelector('.back-to-top');
     const footerEl = document.querySelector('.footer');
     const baseBottom = 28; // px — matches CSS 1.75rem
-    // Coalesced into one rAF per frame: scroll fires far more often than the
-    // screen refreshes, and reading getBoundingClientRect() right before
-    // writing style.bottom forced a synchronous reflow on every event.
-    let scrollTicking = false;
-    const onScrollFrame = () => {
-        scrollTicking = false;
-        const y = window.scrollY;
-        nav.classList.toggle('scrolled', y > 100);
-        if (!backToTop) return;
-        backToTop.classList.toggle('is-visible', y > 400);
-        if (!footerEl) return;
-        // Only measure the footer once the button is actually on screen.
-        if (y <= 400) return;
-        const rect = footerEl.getBoundingClientRect();
-        const overlap = window.innerHeight - rect.top;
-        backToTop.style.bottom = overlap > 0 ? (baseBottom + overlap) + 'px' : '';
-    };
     window.addEventListener('scroll', () => {
-        if (scrollTicking) return;
-        scrollTicking = true;
-        requestAnimationFrame(onScrollFrame);
+        nav.classList.toggle('scrolled', window.scrollY > 100);
+        if (backToTop) {
+            backToTop.classList.toggle('is-visible', window.scrollY > 400);
+            if (footerEl) {
+                const rect = footerEl.getBoundingClientRect();
+                const overlap = window.innerHeight - rect.top;
+                backToTop.style.bottom = overlap > 0 ? (baseBottom + overlap) + 'px' : '';
+            }
+        }
     }, { passive: true });
     backToTop?.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -652,17 +614,8 @@
             const startTime = performance.now() / 1000;
             let creationComplete = false;
 
-            // The hero scrolls away, but WebGL kept rendering it the whole way
-            // down the page. Stop drawing once it leaves the viewport.
-            let heroVisible = true;
-            new IntersectionObserver(
-                ([entry]) => { heroVisible = entry.isIntersecting; },
-                { threshold: 0 }
-            ).observe(container);
-
             function animate3D() {
                 requestAnimationFrame(animate3D);
-                if (document.hidden || !heroVisible) return;
 
                 // Creation: progressively reveal the geometry
                 if (!creationComplete) {

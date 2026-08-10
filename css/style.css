@@ -451,10 +451,9 @@ body {
 #about {
     position: relative;
     z-index: 2;
-    /* No backdrop-filter here: the background is 96% opaque, so a blur behind
-       it is all but invisible — but it forces the compositor to re-blur
-       everything under a full-height section on every scroll frame. */
     background: color-mix(in srgb, var(--bg) 96%, transparent);
+    backdrop-filter: blur(60px);
+    -webkit-backdrop-filter: blur(60px);
 }
 
 .about-wrapper {
@@ -464,15 +463,12 @@ body {
 
 .about-card.mac-window {
     background: rgba(255, 255, 255, 0.04);
-    /* No backdrop-filter: #about sits above the glyph canvas (z-index 2 vs 1)
-       and paints a 96%-opaque background, so what is behind this card is a
-       flat colour. Blurring a flat colour returns the same flat colour — the
-       effect was invisible, but it re-blurred a 1200px-wide, full-height card
-       on every scroll frame. Same for will-change, which pinned a GPU layer
-       for a transform that only runs once on entrance. */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 16px;
     padding: 0;
+    will-change: transform;
     transition: background 0.5s, border-color 0.4s;
     overflow: hidden;
 }
@@ -851,13 +847,11 @@ body {
     display: block;
     transform: scale(1.02);
     transition: transform 1s var(--ease-out-expo);
+    will-change: transform;
 }
 
-/* will-change only while hovering: leaving it on permanently keeps a GPU
-   layer alive for every card, for an animation that is rarely running. */
 .bento-card:hover .bento-media img {
     transform: scale(1.08) translateX(-10px);
-    will-change: transform;
 }
 
 .bento-meta {
