@@ -60,13 +60,15 @@ initFlipText();
 (function () {
     const btn = document.getElementById('downloadBtn');
     if (!btn) return;
-    fetch('/portfolio/uploader/list')
-        .then(r => r.ok ? r.json() : [])
-        .then(files => {
-            const pdf = files.find(f => /\.pdf$/i.test(f.name) && /cv|resume|curriculo/i.test(f.name));
-            if (pdf) {
-                btn.setAttribute('href', pdf.path);
-                btn.setAttribute('download', pdf.name);
+    // The PDF is generated from this page and committed alongside it, so the
+    // two never drift apart. The old /portfolio/uploader/list endpoint came
+    // from the previous nginx host and no longer exists.
+    const file = 'Joao-Teraoka-Product-Designer.pdf';
+    fetch(file, { method: 'HEAD' })
+        .then(r => {
+            if (r.ok) {
+                btn.setAttribute('href', file);
+                btn.setAttribute('download', file);
             } else {
                 btn.addEventListener('click', e => { e.preventDefault(); window.print(); });
             }
