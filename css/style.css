@@ -807,9 +807,6 @@ body {
 .bento-size-c { grid-column: span 5; }
 .bento-size-d { grid-column: span 7; aspect-ratio: 16 / 9; }
 .bento-size-half { grid-column: span 6; aspect-ratio: 4 / 3; }
-/* Full-width lead card, for the one shipped product. */
-.bento-size-full { grid-column: span 12; aspect-ratio: 21 / 9; }
-@media (max-width: 720px) { .bento-size-full { aspect-ratio: 4 / 3; } }
 .bento-size-topaz { grid-column: span 5; aspect-ratio: auto; height: 420px; }
 .bento-size-steam { grid-column: span 7; aspect-ratio: auto; height: 420px; }
 
