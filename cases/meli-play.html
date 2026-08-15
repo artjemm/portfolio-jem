@@ -439,10 +439,11 @@
     .screen-cell img {
         width: 100%;
         display: block;
-        /* The four mockups are pre-normalised to 4:3, each padded with its own
-           background colour, so the cards line up without letterboxing. */
-        aspect-ratio: 4 / 3;
-        object-fit: cover;
+        /* Same card proportion as Dwello. The mockups are pre-normalised to
+           this ratio, each padded with its own background colour, so nothing
+           letterboxes. */
+        aspect-ratio: 1687 / 1061;
+        object-fit: contain;
     }
     @media (max-width: 720px) { .screen-grid { grid-template-columns: 1fr; } }
 
