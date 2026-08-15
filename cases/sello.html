@@ -415,9 +415,13 @@
     .screen-cell:hover { transform: translateY(-2px); }
     .screen-cell img {
         width: 100%;
+        height: auto;
         display: block;
-        aspect-ratio: 1687 / 1061;
-        object-fit: contain;
+        /* The four mockups are 4:3 presentation shots where the device fills
+           almost the full height. Cropping them to Dwello's 1687/1061 clipped
+           three of the four phones, so the frame follows the artwork here. */
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
     }
     @media (max-width: 720px) { .screen-grid { grid-template-columns: 1fr; } }
 
@@ -770,10 +774,10 @@
     <!-- Screens -->
     <section class="case-section screens-only">
         <div class="screen-grid">
-            <div class="screen-cell"><img src="../assets/sello-explore.jpg" alt="Map exploration, with Sello Scores on every place" loading="lazy" decoding="async"></div>
-            <div class="screen-cell"><img src="../assets/sello-avalie.jpg" alt="The veredito - one decisive score, plus the points it earns" loading="lazy" decoding="async"></div>
-            <div class="screen-cell"><img src="../assets/sello-compartilhe.jpg" alt="Sharing a veredito - the review card sent to friends" loading="lazy" decoding="async"></div>
-            <div class="screen-cell"><img src="../assets/sello-pontos.jpg" alt="Lists and saved guides, built and shared with friends" loading="lazy" decoding="async"></div>
+            <div class="screen-cell"><img src="../assets/sello-explore.jpg" alt="Home - categories, the week's pick and the guides the community saves most" loading="lazy" decoding="async"></div>
+            <div class="screen-cell"><img src="../assets/sello-comunidade.jpg" alt="Community - the feed of vereditos, and the monthly ranking it feeds" loading="lazy" decoding="async"></div>
+            <div class="screen-cell"><img src="../assets/sello-guia.jpg" alt="A collaborative guide - places, who has been, and what they said" loading="lazy" decoding="async"></div>
+            <div class="screen-cell"><img src="../assets/sello-perfil.jpg" alt="Profile - been there, want to go, and the lists you follow" loading="lazy" decoding="async"></div>
         </div>
     </section>
     </div>
