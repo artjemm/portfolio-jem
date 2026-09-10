@@ -531,7 +531,11 @@
 
     @media (max-width: 900px) {
         .case-grid { padding: 2rem 1.5rem; grid-template-columns: 1fr; }
-        .case-grid > .case-section.span-6 { grid-column: span 1; }
+        /* Every section is span 12 by default. On a single-column grid that spawns
+           11 implicit content-sized tracks and the page overflows, so collapse the
+           span itself, not just the .span-6 halves. */
+        .case-grid > .case-section { grid-column: 1 / -1; }
+        .case-grid > .case-section.span-6 { grid-column: 1 / -1; }
     }
 
     /* ===== RESPONSIVE ===== */
