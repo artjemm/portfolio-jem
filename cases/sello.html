@@ -588,7 +588,9 @@
     .case-grid .mockup-grid { gap: 1.2rem; }
 
     @media (max-width: 900px) {
-        .case-grid { padding: 2rem 1.5rem; grid-template-columns: 1fr; }
+        /* minmax(0,1fr), not 1fr: an fr track floors at min-content, and one
+           section pushed the single column past the viewport. */
+        .case-grid { padding: 2rem 1.5rem; grid-template-columns: minmax(0, 1fr); }
         /* Every section is span 12 by default. On a single-column grid that spawns
            11 implicit content-sized tracks and the page overflows, so collapse the
            span itself, not just the .span-6 halves. */
