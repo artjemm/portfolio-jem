@@ -735,10 +735,38 @@
         </div>
     </section>
 
+    <!-- 05 Design system -->
+    <section class="case-section">
+        <div class="case-content">
+            <span class="case-kicker"><span class="num">05</span> Design System</span>
+            <h2 class="case-heading">Mesa DS &mdash; the system underneath</h2>
+            <p class="case-text">A product this size does not hold together on screens alone. Sello runs on its own design system, <strong>Mesa DS</strong>, aligned to Apple's Human Interface Guidelines and carried from Figma into production code as a single source of truth.</p>
+
+            <span class="sub-heading">Token architecture</span>
+            <p class="case-text">Seven token families &mdash; colour, typography, spacing, shape, elevation, motion and state &mdash; rather than one flat palette. Every colour is defined for <strong>light and dark at the same time</strong>, so a theme is a property of the token, not a second set of screens to maintain.</p>
+            <ul class="case-bullets">
+                <li><strong>Semantic over literal.</strong> Tokens are named for their job, not their value: <em>surface</em>, <em>surface-2</em>, <em>fill</em>, <em>separator</em>, <em>label-2</em>, <em>label-3</em>. Changing a hue never means renaming a component.</li>
+                <li><strong>One definition, three consumers.</strong> Tokens resolve to CSS variables, Tailwind classes and a <em>useThemeColors()</em> hook, so design and code cannot drift apart without the drift being visible.</li>
+                <li><strong>Constraints encoded, not remembered.</strong> Minimum tap target lives in the system as a value components read, instead of a rule someone has to recall in review.</li>
+            </ul>
+
+            <span class="sub-heading">The system documents itself</span>
+            <p class="case-text">Mesa DS ships with its own documentation surface inside the app &mdash; colour swatches, type specimens, spec tables and live example frames. Documentation that sits next to the code is documentation that survives the next release; a spec deck in a folder does not.</p>
+
+            <div class="result-grid">
+                <div class="result-card"><span class="r-label">Components</span><span class="r-value">169</span><span class="r-note">Shipped components, including 10 skeleton states.</span></div>
+                <div class="result-card"><span class="r-label">Colour tokens</span><span class="r-value">141</span><span class="r-note">Each resolved for light and dark.</span></div>
+                <div class="result-card"><span class="r-label">Token families</span><span class="r-value">7</span><span class="r-note">Colour, type, spacing, shape, elevation, motion, state.</span></div>
+            </div>
+
+            <p class="case-text">The system is what let one designer ship and keep shipping a consumer product on two platforms. It is also where most of the design decisions actually live &mdash; the screens are just where you can see them.</p>
+        </div>
+    </section>
+
     <!-- 05 -->
     <section class="case-section span-6">
         <div class="case-content">
-            <span class="case-kicker"><span class="num">05</span> Challenges</span>
+            <span class="case-kicker"><span class="num">06</span> Challenges</span>
             <h2 class="case-heading">Trade-offs</h2>
             <ul class="case-bullets">
                 <li><strong>Coverage &times; trust.</strong> Chose the smaller catalogue. A curated app that lists everything is just a directory with better typography.</li>
@@ -752,7 +780,7 @@
     <!-- 06 -->
     <section class="case-section span-6">
         <div class="case-content">
-            <span class="case-kicker"><span class="num">06</span> Takeaways</span>
+            <span class="case-kicker"><span class="num">07</span> Takeaways</span>
             <h2 class="case-heading">What I carry forward</h2>
             <ul class="case-bullets">
                 <li>A score is worth what its provenance is worth. <strong>Explaining where it came from beats one more decimal place.</strong></li>
@@ -766,7 +794,7 @@
     <!-- 07 -->
     <section class="case-section">
         <div class="case-content">
-            <span class="case-kicker"><span class="num">07</span> Status</span>
+            <span class="case-kicker"><span class="num">08</span> Status</span>
             <h2 class="case-heading">Where it stands</h2>
             <p class="case-text">Live on the App Store and Google Play, launched in S&atilde;o Paulo.</p>
             <div class="result-grid">
